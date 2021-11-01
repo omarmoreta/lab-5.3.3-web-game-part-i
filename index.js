@@ -1,43 +1,61 @@
-//Define a function for creating an element and adding position and placements
-function newImage(item, elType, local, positionType, move1, move2) {
-  item = document.createElement(elType);
-  item.src = local;
-  item.style.position = positionType;
-  item.style.left = move1;
-  item.style.bottom = move2;
-  document.body.append(item);
-  return item;
+function newImage(local) {
+  let image = document.createElement("img");
+  image.src = local;
+  document.body.append(image);
+  return image;
 }
 
-//newImage invoked with arguments for greenCharacter pineTree, tree, pillar, crate, and well
-newImage(
-  "greenCharacter",
-  "img",
-  "assets/green-character.gif",
-  "fixed",
-  "100px",
-  "100px"
-);
-newImage("pineTree", "img", "assets/pine-tree.png", "fixed", "450px", "200px");
-newImage("tree", "img", "assets/tree.png", "fixed", "200px", "300px");
-newImage("pillar", "img", "assets/pillar.png", "fixed", "350px", "100px");
-newImage("crate", "img", "assets/crate.png", "fixed", "150px", "200px");
-newImage("well", "img", "assets/well.png", "fixed", "500px", "425px");
+function move(image) {
+  image.style.position = "fixed";
 
-//Define a new function to create and remove item adding an event listener
-function newItem(item, elType, local, positionType, move1, move2) {
-  item = newImage(item, elType, local, positionType, move1, move2);
+  function moveToCoordinates(left, bottom) {
+    image.style.left = left + "px";
+    image.style.bottom = bottom + "px";
+  }
+  return {
+    to: moveToCoordinates,
+  };
+}
 
-  item.addEventListener("dblclick", function () {
-    item.remove();
+move(newImage("assets/green-character.gif")).to(100, 100);
+move(newImage("assets/pine-tree.png")).to(450, 200);
+move(newImage("assets/tree.png")).to(200, 300);
+move(newImage("assets/pillar.png")).to(350, 100);
+move(newImage("assets/crate.png")).to(150, 200);
+move(newImage("assets/well.png")).to(500, 425);
+
+function newItem(local) {
+  let items = newImage(local);
+  items.addEventListener("dblclick", function () {
+    items.remove();
+    let inventoryItem = document.createElement("img");
+    inventoryItem.src = local;
+    inventory.append(inventoryItem);
   });
+  return items;
+}
+move(newItem("assets/sword.png")).to(500, 405);
+move(newItem("assets/sheild.png")).to(165, 185);
+move(newItem("assets/staff.png")).to(600, 100);
+
+let inventory = document.createElement("div");
+
+function makeInventory() {
+  inventory.style.position = "fixed";
+  inventory.style.bottom = "0px";
+  inventory.style.left = "0px";
+  inventory.style.width = "100%";
+  inventory.style.height = "100px";
+  inventory.style.display = "flex";
+  inventory.style.flexDirection = "row";
+  inventory.style.alignItems = "center";
+  inventory.style.justifyContent = "space-evenly";
+  inventory.style.border = "2px solid black";
+  inventory.style.backgroundColor = "brown";
+  document.body.append(inventory);
 }
 
-//newItem invoked with arguments for sword, shield, and staff
-newItem("sword", "img", "assets/sword.png", "fixed", "500px", "405px");
-newItem("shield", "img", "assets/sheild.png", "fixed", "165px", "185px");
-newItem("staff", "img", "assets/staff.png", "fixed", "600px", "100px");
-
+makeInventory();
 //Define a new function to top and bottom half with different images
 // function scenery(item, elType, local, positionType, move1, move2) {
 //   for (let i = 0; i < height; i++) {
